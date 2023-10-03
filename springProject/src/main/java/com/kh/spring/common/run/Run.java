@@ -16,6 +16,19 @@ public class Run {
 		pd.setStatus("Y");
 		pd.setLocation("l1");
 
+		System.out.println(pd);
+
+		// builder pattern
+		Product pd2 = Product.builder()
+				.id("p002")
+				.name("상품2")
+				.createDate("2022-03-03")
+				.status("N")
+				.location("l3")
+				.quantity(0)
+				.build();
+
+		System.out.println(pd2);
 	}
 
 }
