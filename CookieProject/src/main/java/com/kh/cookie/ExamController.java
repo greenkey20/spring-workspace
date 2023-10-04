@@ -14,7 +14,7 @@ public class ExamController {
 	}
 	
 	// 2022.3.2(수) 11h5
-	// 쿠키 있으면 광고(div, 모달 창(o) 팝업창(x)) 안 보여줌
+	// cookie 있으면 광고(div, 모달 창(o) 팝업창(x)) 안 보여줌
 	// 요새는 브라우저에서 팝업창 차단하는 바, 팝업창 광고 잘 안 함
 	@RequestMapping("/ad")
 	public String ad() {
