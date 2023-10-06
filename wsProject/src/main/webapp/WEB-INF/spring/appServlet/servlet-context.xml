@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.kh.ws" />
+	
+	<!--2022.3.3(목) 14h45 웹소켓 작업을 처리하는 서버 등록 <- websocket 관련 설정 태그 필요-->
+	<beans:bean id="basicServer" class="com.kh.ws.WebSocketBasicServer" />
+	<beans:bean id="groupServer" class="com.kh.ws.WebSocketGroupServer" />
+	<websocket:handlers>
+		<websocket:mapping handler="basicServer" path="sc" /> <!--접속 주소 = ws://localhost:8008/ws/sc; 내가 만든 웹소켓을 연결시켜주겠다 <- handler = 처리기, path = 경로 = 내가 임의로 쓰면 되는데, 단, 몇몇 키워드는 쓰면 안 됨 -> 써보고 안 되면 변경-->
+		<websocket:mapping handler="groupServer" path="gr" />
+	</websocket:handlers>
+	
+</beans:beans>

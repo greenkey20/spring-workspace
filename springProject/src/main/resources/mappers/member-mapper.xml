@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--2022.2.15(화) 9h35 환경 설정 파일 만들기 전에 mappers 파일 먼저 만들어두기-->
+
+<mapper namespace="memberMapper"> <!--namespace(이름공간) = 별칭-->
+  <!--<cache-ref namespace=""/>는 필요 없는 바, 삭제-->
+  
+  <!--2022.2.17(목) 12h25
+  	  SELECT문의 조회 결과를 vo에 담고 싶으면 resultMap을 만듦
+  	  vs loginMember의 조회 결과로 Member vo 객체를 반환하고 싶은데, resultMap을 사용하지 않고 할 수 있는 방법 있음
+  	  	  단계1) <select id="loginMember" parameterType="member" resultType="member">로 mapper 파일 태그 작성
+  	  	  단계2) Member 테이블의 컬럼명과 Member vo 객체의 필드명이 정확하게 일치해야 함 -> 단, Oracle(대문자로만 이름 짓기 + 띄어쓰기 구분이 어렵기 때문에 _(underbar)로 단어 구분)과 Java의 naming conventions가 다르기 때문에, 이렇게 사용할 일은 거의 없을 것임-->
+  <resultMap id="memberResultSet" type="member">
+  	<result column="USER_ID" property="userId" /> <!--property = vo 객체의 필드-->
+  	<result column="USER_PWD" property="userPwd" />
+  	<result column="USER_NAME" property="userName" />
+  	<result column="EMAIL" property="email" />
+  	<result column="GENDER" property="gender" />
+  	<result column="AGE" property="age" />
+  	<result column="PHONE" property="phone" />
+  	<result column="ADDRESS" property="address" />
+  	<result column="ENROLL_DATE" property="enrollDate" />
+  	<result column="MODIFY_DATE" property="modifyDate" />
+  	<result column="STATUS" property="status" />
+  </resultMap>
+  
+  <!--2022.2.17(목) 12h15 로그인용 쿼리문 = SELECT문 = select 태그 사용-->
+  <select id="loginMember" parameterType="member" resultMap="memberResultSet"> <!--강사님 의견 = parameterType="member" 없어도 동작할 것 같음-->
+  	SELECT USER_ID, USER_PWD, USER_NAME, EMAIL, GENDER, AGE, PHONE, ADDRESS, ENROLL_DATE, MODIFY_DATE, STATUS
+  	FROM MEMBER
+  	WHERE USER_ID = #{userId} AND STATUS = 'Y' <!--2022.2.18(금) 12h45 암호화된 비밀번호로 회원 로그인 기능 구현을 위해, 쿼리문에서 USER_PWD = #{userPwd} AND 삭제-->
+  </select>
+  
+  <!--2022.2.18(금) 11h25 회원 가입을 위한 쿼리문-->
+  <insert id="insertMember" parameterType="member"> <!--resultMap/Set은 select문 쓸 때만 기재하면 됨 vs dml 구문은 알아서 int 자료형 반환해줌-->
+  	INSERT INTO MEMBER(USER_ID, USER_PWD, USER_NAME, EMAIL, GENDER, AGE, PHONE, ADDRESS)
+  	VALUES(#{userId}, #{userPwd}, #{userName}, #{email}, #{gender}, #{age}, #{phone}, #{address}) <!--좌측과 같이 기재하면 MyBatis가 알아서 getUserId() 등 호출해서 값 받아옴-->
+  </insert>
+  
+  <!--2022.2.18(금) 15h40 회원 정보 수정을 위한 쿼리문-->
+  <update id="updateMember" parameterType="member">
+  	update member
+  	set user_name = #{userName}, <!--# = sharp-->
+  		email = #{email},
+  		age = #{age},
+  		phone = #{phone},
+  		address = #{address},
+  		gender = #{gender},
+  		modify_date = sysdate
+  	where user_id = #{userId} <!--userId = 식별자 -> 1행만 수정되거나 0행 처리-->
+  </update>
+  
+  <!--2022.2.18(금) 17h10 실습 + 17h35 강사님 설명; 회원 탈퇴를 위한 쿼리문-->
+  <update id="deleteMember" parameterType="string">
+  	update member
+  	set status = 'N'
+  	where user_id = #{userId} <!--강사님께서는 and status = 'Y' 조건 안 쓰심-->
+  </update>
+  
+  <!--2022.2.23(수) 12h20-->
+  <select id="idCheck" resultType="_int">
+  	select count(*)
+  	from member
+  	where user_id = #{checkId}
+  </select>
+  
+  <!--2022.3.15(화) 12h15-->
+  <insert id="register" parameterType="certVo">
+  	INSERT INTO CERT(who, secret, when)
+  	VALUES(#{who}, #{secret}, sysdate)
+  </insert>
+  
+  <!--2022.3.15(화) 12h35
+  	    테이블 컬럼명과 vo 클래스 필드명이 모두 동일하다는 특정 조건 하에서 resultType을 vo 객체로 지정할 수 있음-->
+  <select id="validate" parameterType="certVo" resultType="certVo">
+  	<!--번거로우니까 >.< 그냥 * select하기로 함-->
+  	SELECT * FROM CERT
+  	WHERE who = #{who}
+  		and secret = #{secret}
+  		and when between sysdate - 3/24/60 and sysdate
+  	<!--생성된 인증 번호는 3분만 유효함
+  		현재 시각(sysdate) - when(생성 시각) <= 3분 -> 이렇게 표기 시 '<'가 태그의 시작으로 인식되어 쿼리문이 잘 작동 안함
+  		<![CDATA[
+  		
+  		]]> 안에 기재하면 <를 태그 시작(x) 일반 기호(?)(o)로 입력/인식시킬 수 있긴 함
+  		
+  		sysdate / 24 / 60(날짜를 시로 나누고 분으로 나눠 분으로 만듦) - when / 24 / 60 <= 3
+  		
+  		3/24/60 = 3분 = 하루로 쪼개고 시간으로 쪼개서 3분(Googling해서  공부하기)-->
+  </select>
+  
+  <!--2022.3.15(화) 14h10-->
+  <delete id="remove" parameterType="certVo">
+  	DELETE CERT <!--나의 관찰 = from은 생략 가능한 가보다..!?-->
+  	WHERE who = #{who} and secret = #{secret}
+  </delete>
+  
+</mapper>

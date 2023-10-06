@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+
+<!--2022.3.24(목) 10h-->
+<insert id="insertNotice">
+	INSERT INTO NOTICE_EXAM(NID, TITLE, WRITER, CONTENT, NDATE)
+	VALUES(SEQ_NID.NEXTVAL, #{title},  #{writer},  #{content},  SYSDATE)
+</insert>
+
+</mapper>

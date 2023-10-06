@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!--Root Context: defines shared resources visible to all other web components
+		2022.2.15(화) 10h35
+		root-context.xml 파일 = 서버 구동과 동시에 web.xml(배포 서술자) 파일을 거쳐서 바로 로딩(preloading)되는 문서 -> 서버 구동과 동시에 바로 세팅(bean으로 등록)해야 하는 내용들(db 연결 정보, 트랜잭션 처리, 내/외부 modules 연결 등)을 작성
+		bean 태그 = Spring에게 해당 내용을 주입하는 것 -> property 태그 = setter 주입; constructor-arg 태그 = 생성자 주입-->
+	
+	
+	<!--2022.3.24(목) 10h20 평가자 checklist 평가 시 test-->
+	<!--
+	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.10.245:1521:xe" />
+		<property name="username" value="SPRING" />
+		<property name="password" value="SPRING" />
+	</bean>
+	-->
+	
+	<!--메이븐에서 다운받은 ojdbc6-spring 안에있는 파일 빈등록
+	
+		db 등록 3단계
+		단계1) db 연결을 위한 도구 설정
+		destroy-method = 접속이 끊겼을 때 destroy?close?하겠다는 속성(? 10h40 강사님 설명 제대로 못 들음)-->
+	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close"> <!--내가 만들지 않은 이 클래스의 관리를 Spring에게 위임 <- bean 등록-->
+		<!--어느 db에 접속할 것인지 지정-->
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="SPRING" />
+		<property name="password" value="spring" />
+	</bean>
+	<!--객체가 필요할 때마다 Spring이 알아서 실행해줘서 내부적으로 실행되는 코드 = setter 메소드를 사용해서 초기화
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
+		dataSource.setUsername("SPRING");
+		dataSource.setPassword("spring");-->
+	
+	<!--단계2) MyBatis Spring에서 제공하는 sql 명령어 실행을 위한 도구 등록-->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+		<!--bean 태그 내의 property 태그 = setter 역할-->
+		
+		<!--MyBatis 설정 파일의 위치를 지정(src/main/resources)해서 설정 값들을 가져옴 <- 'classpath:' = resources 폴더-->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		
+		<!--어떤 db에 연결할 것인지, 연결을 위한 도구를 참조해서 설정-->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!--객체가 필요할 때마다 내부적으로 아래 코드가 실행됨
+		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+		sqlSessionFactory.setConfigLocation("classpath:mybatis-config.xml");
+		sqlSessionFactory.setDataSource(dataSource);-->
+	
+	<!--단계3) sql 구문 실행을 위한 template을 제공하는 도구 등록 -> 2022.3.11(금) 12h5 나의 질문 = MyBatis의 SqlSession과 동일한 것인가?-->
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
+		<!--bean 태그 내의 constructor-arg 태그 = 생성자 역할 -> ref = 생성자에 전달되는 매개변수-->
+		
+		<!--sql 명령어 실행을 위한 도구에 대한 참조 설정-->
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	<!--객체가 필요할 때마다 내부적으로 아래 코드가 실행됨
+		SqlSessionTemplate sqlSession = new SqlSessionTemplate(sqlSessionFactory);-->
+	
+	<!--2022.2.21(월) 15h20 파일 업로드 관련 bean 등록; 업로드 파일 용량 무제한-->
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<property name="maxUploadSize" value="100000000" /> <!-- '0' 8개 = 100Mbytes 정도(? 15h20 제대로 못 들음) -->
+		<property name="maxInMemorySize" value="100000000" />
+	</bean>
+	
+	<!--2022.3.15(화) 10h15 메일 전송 관련; 필기 등 속도가 빨라서, 강사님 설명 정확히 다 못 들음 ㅠ.ㅠ-->
+	<bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> <!--객체 생성-->
+		<!--필드 값 초기화(initialisation)-->
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="greenkey20@gmail.com" />
+		<property name="password" value="02Purple14gEgE*" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+		
+</beans>

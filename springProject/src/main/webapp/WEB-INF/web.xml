@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!--2022.2.15(화) 10h30
+		tomcat 8.5와 호환 잘 되는 version은 3.1(o) 2.5(x)이나, 굳이 바꾸지는 않기로 함
+		codes는 항상 위->아래로 읽힘
+		서버 시작하면/켜면/구동과 동시에 가장 먼저 읽히는 파일 = 배포서술자 web.xml = welcome file로 등록되어 있는 파일 = Spring에서는 이 문서를 Spring이 알아서 만듦 vs dynamic web project 생성 시 내가 체크해야 만들어졌음
+		이 파일을 건드린 경우, 무조건 서버를 껐다 켜야 함-->
+
+	<!--The definition of the Root Spring Container shared by all Servlets and Filters
+		서버 구동과 동시에 곧바로 읽어낼 문서인 root-context.xml(최상위 설정 파일)의 경로를 등록한 부분-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/root-context.xml <!--root = 최상위 -> root-context.xml = 최상위 설정 파일 = 서버 구동과 동시에 곧바로 읽어낼 문서-->
+			/WEB-INF/spring/spring-security.xml <!--2022.2.18(금) 10h45 비밀번호 암호화 관련 spring-security.xml 파일에 bean 등록한 뒤, 추가 -->
+		</param-value> 
+	</context-param>
+	
+	<!--2022.2.17(목) 9h20 나의 질문 = listener는 무엇인가?-->
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!--2022.2.17(목) 9h25
+		500/404 errors 발생 시, 각각 어떤 페이지를 보여줄 것인지 web.xml(배포서술자; dynamic web project에서도)에 기재해 둘 수 있음-->
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!--'DispatcherServlet이 구동될 때 servlet-context.xml 파일을 읽겠다'는 의미 vs 서버 구동 시 root-context.xml 파일을 읽겠다 -> 2022.3.11(금) 9h55 나의 질문 = 후자는 어떻게 설정하는 것이지?-->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<!--'/'로 시작하는 모든 요청이 들어올 경우, appServlet(=DispatcherServlet의 name)으로 보냄/이 받음-->
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!--2022.2.17(목) 17h
+		필터 = client의 요청을 controller가 받기 전에 먼저 가로채서, 모든 요청 처리 전 공통적으로 필요한 기능들을 수행할 수 있도록 함
+		서버 구동 시 이 파일/배포서술자/web.xml이 가장 먼저 읽힘 -> 다른 파일들보다 아래 코드가 먼저 실행됨 -> 필터는 배포서술자에 작성해서 해당 작성 내용이 먼저 수행되도록 함
+		
+		Spring에서 제공해주는 encoding 필터 등록
+		org.springframework.web.filter.CharacterEncodingFilter -> 나의 질문 = 이 url의 의미가 뭐지? 강사님 설명 놓침
+		필터 등록 시, filter 태그와 filter-mapping 태그를 함께 써야 함 + 반드시 filter-name 태그로 filter명을 지정해줘야 함
+		
+		아래 필터는 거의 항상 등록해 놓는 것이 좋을 것임-->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> <!--이 주소? 오타 있으면 '클래스 찾을 수 없음' 오류 발생할 수 있음-->
+		
+		<!--옵션1 = encoding 방식을 UTF-8로 설정-->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		
+		<!--옵션2 = 혹시나 충돌 시(17h5 나의 질문 = 뭐와 뭐가 충돌? -> 17h10 강사님 답변 = 다른 라이브러리에서 encoding하는 경우 + __(제대로 못 받아적음) 등) 강제 encoding도 UTF-8로 설정-->
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<!--위에서 지정한 encodingFilter를 모든 패턴에 적용-->
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern> <!--/(slash)로 시작하는 전부 다에 필터 적용-->
+	</filter-mapping>
+
+</web-app>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!--2022.2.17(목) 9h45 @Controller와 같은 annotation을 활성화해주는 설정-->
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!--2022.2.17(목) 14h40-->
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!--주소 자동 완성 도구 등록 = 매번.. (필기 다 못하고 화면 캡쳐만 해둠 ㅠ.ㅠ)
+	
+		/WEB-INF/views/~~~~~~.jsp를 적기 귀찮으니까 자동완성 해준다.
+		- view resolver라는 도구를 등록(Spring이 해줌)
+		class : 패키지 경로를 포함한 view resolver의 풀 클래스명
+		prefix : 접두사 / suffix : 접미사
+		- 이말인 즉슨 앞으로 작성할 return 부분에 접두사와 접미사를 항상 붙여서 요청하겠다.
+	
+		view resolver에 return한 String "main" 들고, servlet-context.xml로 옴 -> 주도 자동 완성 도구 등록
+		/WEB-INF/views/main.jsp = 절대경로(맨 앞의 / = webapp) = "main" 문자열의 목적지
+		"board/boardListView"로 문자열 return하면 /WEB-INF/views/board/boardListView.jsp로 가게 됨
+	-->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!--2022.2.17(목) 14h45 추가
+		base-package에서 설정된 패키지와 그 이하 패키지를 감시해서 등록 가능한 도구(Component)를 모두 찾아서 자동 등록하는 설정-->
+	<!--2022.2.17(목) 9h30-->
+	<context:component-scan base-package="com.kh.spring" /> <!--사용자가 어떤 url로 요청 시 이 문서(2022.3.11(금) 10h30 나의 질문 = 어떤 문서? 이 servlet-context.xml 파일?)가 읽혀지는지 지정 -> 사용자가 내 프로젝트로 요청했을 때, 이 문서가 읽혀짐-->
+	<!--handlerMapping -> 어떤 url로 요청 시 어떤 controller를 구동시킬 것인지 알아내야 함 -> 해당 controller가 실행
+		방법1 = xml 방식 = 고전적인 방식) 장점 = xml 문서 내에서 한 눈에 볼 수 있음 -> 관리의 편의성이 높음 vs 단점 = bean 개수가 많아지면 오히려 관리하기 어려움 + 여러 개발자가 같은 xml 파일을 수정하게 되면 충돌이 발생할 수 있음 -> 사용해야 하는 경우가 있으나, 요새는 잘/많이 안 쓰는 방법
+		step1) 요청할 때마다 실행될 controller 클래스들이 bean으로 등록되어 있음
+		<beans:bean class="com.kh.spring.member.controller.LoginController" id="loginController" />
+		<beans:bean class="com.kh.spring.member.controller.LogoutController" id="logoutController" />
+		..
+		
+		step2) 어떤 url로 요청 시 어떤 controller를 구동시킬 것인지 mapping 시키는 HandlerMapping 관련 클래스를 bean으로 등록해야 함; 컨트롤러 만들기 전에 이 등록 작업을 미리 해 두어야 함 -> 요새는 잘/많이 안 쓰는 방법
+		<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+			<bean:property name="mapping">
+				<beans:props>
+					<beans:prop key="login.me">loginController</beans:prop>
+					<beans:prop key="logout.me">logoutController</beans:prop>
+				</beans:props>
+			</bean:property>
+		</beans:bean>
+		
+		방법2 = annotation 방식) component-scan에서 지정한, 감시할 패키지명 하위의 모든 클래스들을 스캔해서, @Controller와 같은 MVC annotation이 붙은 클래스들을 자동으로 bean으로 등록해주는 방식
+		
+		2022.2.17(목) 10h
+		단, 내가 직접 만든 클래스가 아닐 경우, 컴파일된 클래스 파일 형태로 배포되어 소스코드 내부를 볼 수 없고, 수정도 불가능함 -> 코드 상으로 annotation을 붙일 수 없음 -> 이 경우에는 xml 파일로 설정해서 등록해줘야 함
+		내가 직접 만든 클래스는 vs 내가 만들지 않은 것(?)은 WEB-INF > classes에 배포됨
+		나의 질문 = 내가 만들지 않은 클래스는 숨겨져/어디에 있는 것인가요?-->
+		
+	<!--2022.2.24(목) 14h30-->
+	<interceptors>
+		<interceptor>
+			<mapping path="/myPage.me" />
+			<mapping path="/enrollForm.bo" />
+			<beans:bean class="com.kh.spring.common.interceptor.LoginInterceptor" id="LoginInterceptor" /> <!--id는 식별하려고 기재한 것이며, 안 써도 됨-->
+		</interceptor>
+	</interceptors>
+	
+</beans:beans>
