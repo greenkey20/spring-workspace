@@ -23,7 +23,7 @@
 	
 		db 등록 3단계
 		단계1) db 연결을 위한 도구 설정
-		destroy-method = 접속이 끊겼을 때 destroy?close?하겠다는 속성(? 10h40 강사님 설명 제대로 못 들음)-->
+		destroy-method = 접속이 끊겼을 때 destroy/close하겠다는 속성(10h40 강사님 설명 제대로 못 들음), 주어진 세션을 자동으로 close하라는 의미-->
 	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close"> <!--내가 만들지 않은 이 클래스의 관리를 Spring에게 위임 <- bean 등록-->
 		<!--어느 db에 접속할 것인지 지정-->
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
@@ -65,7 +65,7 @@
 	
 	<!--2022.2.21(월) 15h20 파일 업로드 관련 bean 등록; 업로드 파일 용량 무제한-->
 	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
-		<property name="maxUploadSize" value="100000000" /> <!-- '0' 8개 = 100Mbytes 정도(? 15h20 제대로 못 들음) -->
+		<property name="maxUploadSize" value="100000000" /> <!-- '0' 8개 = 100Mbytes 정도(15h20 제대로 못 들음) -->
 		<property name="maxInMemorySize" value="100000000" />
 	</bean>
 	
@@ -74,8 +74,8 @@
 		<!--필드 값 초기화(initialisation)-->
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
-		<property name="username" value="greenkey20@gmail.com" />
-		<property name="password" value="02Purple14gEgE*" />
+		<property name="username" value="greenkey20@mail.net" />
+		<property name="password" value="" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>

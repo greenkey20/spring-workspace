@@ -177,7 +177,7 @@
 		    <version>1.3.2</version>
 		</dependency>
 		
-		<!--1e) Connection Pool을 사용하기 위한  library -> 17h 나의 질문 = MyBatis Connection Pool이 뭐였지? >.<-->
+		<!--1e) Connection Pool을 사용하기 위한  library -> 17h 나의 질문 = MyBatis Connection Pool이 뭐였지? >.< -> mybatisProject의 mybatis-config.xml 파일 참고-->
 		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
 		<dependency>
 		    <groupId>commons-dbcp</groupId>

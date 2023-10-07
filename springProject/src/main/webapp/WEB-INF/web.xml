@@ -63,7 +63,7 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 		
-		<!--옵션2 = 혹시나 충돌 시(17h5 나의 질문 = 뭐와 뭐가 충돌? -> 17h10 강사님 답변 = 다른 라이브러리에서 encoding하는 경우 + __(제대로 못 받아적음) 등) 강제 encoding도 UTF-8로 설정-->
+		<!--옵션2 = 혹시나 충돌 시(17h5 나의 질문 = 뭐와 뭐가 충돌? -> 17h10 강사님 답변 = 다른 라이브러리에서 encoding하는 경우 + __(제대로 못 받아적음) 등 강제 encoding도 UTF-8로 설정-->
 		<init-param>
 			<param-name>forceEncoding</param-name>
 			<param-value>true</param-value>
