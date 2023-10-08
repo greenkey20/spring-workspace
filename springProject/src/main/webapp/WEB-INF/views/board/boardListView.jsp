@@ -146,7 +146,7 @@
                     	<c:when test="${ pi.currentPage eq pi.maxPage }"> <!--현재 페이지가 마지막 페이지인 경우 -> Next 버튼 비활성화-->
                     		<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
                     	</c:when>
-                    	<c:otherwise> <!--현재 페이지가 마지막 페이지인 경우-->
+                    	<c:otherwise> <!--현재 페이지가 마지막 페이지가 아닌 경우-->
                     		<li class="page-item"><a class="page-link" href="list.bo?cpage=${ pi.currentPage + 1 }">Next</a></li>
                     	</c:otherwise>
                     </c:choose>

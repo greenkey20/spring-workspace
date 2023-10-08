@@ -1,4 +1,4 @@
-package com.kh.spring.board.model.dao;
+package main.java.com.kh.spring.board.model.dao;
 
 import java.util.ArrayList;
 
@@ -6,9 +6,9 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.kh.spring.board.model.vo.Board;
+import main.java.com.kh.spring.board.model.vo.Board;
 import com.kh.spring.board.model.vo.Reply;
-import com.kh.spring.common.model.vo.PageInfo;
+import main.java.com.kh.spring.common.model.vo.PageInfo;
 
 //2022.2.21(월) 10h35
 

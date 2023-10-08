@@ -65,7 +65,7 @@
 			<c:if test="${ (loginUser.userId eq b.boardWriter) or (loginUser.userId == 'admin') }"> <!--로그인한 사용자가 현재 상세 조회 중인 게시글 작성자와 동일한 경우-->
 				<div align="center">
 	                <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
-	                <a class="btn btn-primary" onclick="postFormSubmit(1)">수정하기</a>
+	                <a class="btn btn-priary" onclick="postFormSubmit(1)">수정하기</a>
 	                <a class="btn btn-danger" onclick="postFormSubmit(2)">삭제하기</a> <!--href 속성 값으로 요청보내면 url 노출/get 방식 요청 -> 게시글 수정/삭제 시 보안에 취약할 수 있음; 2022.2.22(화) 11h15 나의 관찰 = 'href=""'를 a 태그 안에 남겨두었더니 onclick 속성 적용 안 되는 듯-->
 	            </div>
 	            <br><br>

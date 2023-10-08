@@ -1,4 +1,4 @@
-package com.kh.spring.board.controller;
+package main.java.com.kh.spring.board.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.kh.spring.board.model.service.BoardService;
-import com.kh.spring.board.model.vo.Board;
+import main.java.com.kh.spring.board.model.service.BoardService;
+import main.java.com.kh.spring.board.model.vo.Board;
 import com.kh.spring.board.model.vo.Reply;
-import com.kh.spring.common.model.vo.PageInfo;
-import com.kh.spring.common.template.Pagination;
+import main.java.com.kh.spring.common.model.vo.PageInfo;
+import main.java.com.kh.spring.common.template.Pagination;
 
 // 2022.2.21(월) 10h40
 
@@ -108,11 +108,12 @@ public class BoardController {
 			
 			String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()); // 2022(연)02(월)21(일)15(시)37(분)40(초)
 			int ranNum = (int)(Math.random() * 99999 + 10000); //  5자리 랜덤 숫자
-			String ext = originName.substring(originName.lastIndexOf(".")); // 원본 파일의 확장자 <- 원본 파일명의 맨 마지막에 있는 .을 기준으로(?) 자름(15h40 String 메소드 다시 공부하기 ㅠ.ㅠ)
+			String ext = originName.substring(originName.lastIndexOf(".")); // 원본 파일의 확장자 <- 원본 파일명의 맨 마지막에 있는 .을 기준으로/시작 위치로 해서 자름(15h40 String 메소드 다시 공부하기 ㅠ.ㅠ)
 			
 			String changeName = currentTime + ranNum + ext;
 			
 			String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/"); // 업로드하고자 하는 폴더의 물리적인 경로 알아내기; 15h45 강사님께서 uploadFiles 뒤에 반드시 / 붙여야 한다고 말씀/강조하셨는데, 왜인지 정확히 못 들음 ㅠ.ㅠ
+			// cf. web-workspace2 > JSP project > BoardInsertController에서 String savePath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/"); // 가장 왼쪽에 나오는 / = WebContent(15h45 왜/어떻게인지 강사님의 설명 놓침); 가장 우측에 /(폴더임을 표시) 꼭 붙여주기
 			
 			try {
 				upfile.transferTo(new File(savePath + changeName)); // savePath라는 경로에 changeName이라는 이름으로 file을 만들어서 upfile을 (서버 컴퓨터의)hard disc에 물리적으로 저장
@@ -187,18 +188,24 @@ public class BoardController {
 		return mv;
 	} // boardDetail() 종료 -> 테스트 시 '파일 없음'으로 파일 다운로드가 안 되는 문제 해결하다가 2022.2.21(월) 18h25  중단
 	*/
-	// 강사님의 guide 필기 못 함(화면 캡쳐만 해둠)
+	// 강사님의 guide 필기 못 함(화면 캡쳐만 해둠) -> 2023.10.9(월) 15h 아래에 메모 추가
 	
 	// 2022.2.22(화) 9h25 강사님 설명
 	@RequestMapping("detail.bo")
-	public ModelAndView selectBoard(ModelAndView mv, int bno) { // 게시글을 식별하는 데에..(필기 다 못함); key 값과 똑같은 이름의 매개변수 + String형이지만 내가 int형으로 쓰면 알아서 parsing됨
-		// 회원 가입 시에도 정보 모두 입력하고 가입 잘 되었음(이 때도 String으로 넘어오는 자료가 int로 parsing된 것임) + 단, 반드시 숫자 값이 포함되어 있어야 숫자로 parsing됨 -> 그래서 회원 가입 시 선택적 입력 사항인 
+	public ModelAndView selectBoard(ModelAndView mv, int bno) { // 게시글을 식별하는 데에 필요한 값; key 값과 똑같은 이름의 매개변수 + String형이지만 내가 int형으로 쓰면 알아서 parsing됨 -> 게시글 식별하는 데 필요한 값 가지고 DB에 가서 조건문의 어떤 조건으로 쓰여야 함
+		// 회원 가입 시에도 정보 모두 입력하고 가입 잘 되었음(이 때도 String으로 넘어오는 자료가 int로 parsing된 것임) + 단, 반드시 숫자 값이 포함되어 있어야 숫자로 parsing됨 -> 그래서 회원 가입 시 선택적 입력 사항인(2023.10.9(월) 16h 나의 질문 = 무엇을 쓰다 만 걸까?)
+
+		// 해당 게시글 조회 수 증가용 service 호출 결과 받기 <- update문
 		int result = boardService.increaseCount(bno);
 		
-		if (result > 0) { // 조회 수가 정상적으로 증가되었다면 -> 조회 수를 증가시킨 게시글의 정보를 db로부터 받아옴
+		if (result > 0) { // 조회 수가 정상적으로 증가되었다면
+			// 게시글 상세 정보 조회용 service 호출 -> boardDetailView.jsp 상에 필요한 데이터를 조회 = 조회 수를 증가시킨 게시글의 정보를 db로부터 받아옴
 			Board b = boardService.selectBoard(bno);
+
+			// 조회된 데이터를 담아서 board/boardDetailView로 forwarding
 			mv.addObject("b", b).setViewName("board/boardDetailView");
 		} else { // 조회 수 증가에 실패했다면
+			// error 문구 담아서 error page로 forwarding
 			mv.addObject("errorMsg", "게시글 상세 조회에 실패했습니다").setViewName("common/errorPage");
 		}
 		
