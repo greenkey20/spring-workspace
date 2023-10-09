@@ -1,10 +1,11 @@
-package com.kh.spring.member.controller;
+package main.java.com.kh.spring.member.controller;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import main.java.com.kh.spring.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.spring.entity.CertVo;
-import com.kh.spring.member.model.service.MemberService;
-import com.kh.spring.member.model.vo.Member;
+import main.java.com.kh.spring.member.model.service.MemberService;
+import main.java.com.kh.spring.member.model.vo.Member;
 
 // 2022.2.15(화) 12h45 jdbc 배울 때 했듯이 일반 Java 클래스로 만든 controller에 여러 메소드 모아서 쓸 것임
 // Spring에 servlet은 존재하긴 함: view단으로부터 사용자가 요청함 -> servlet(Spring에서는 DispatcherServlet)이 모든 요청을 받아줌 -> 요청별로 실행/처리할 내용은 다른 바, DispatcherServlet으로부터 어찌저찌 이 MemberController(나만의 controller)로 받고, 그 안에서 각기 다른 메소드로 처리
-// 2022.2.17(목) 9h15 사용자가 어떤 요청을 하든지 DispatcherServlet이 요청받아줌(new MemberDao()(bean 등록 필요).insertMember() 등과 같이 내가 객체 생성할 일 없고, Spring이 알아서 해줌 등등 강사님 설명 제대로 못 들음) + logic 처리는 내가 만든 controller 클래스에서 각 기능 담당하는 메소드가 함 + handler mapping(?제대로 못 받아적음; 새로운 개념)
+// 2022.2.17(목) 9h15 사용자가 어떤 요청을 하든지 DispatcherServlet이 요청받아줌(new MemberDao()(bean 등록 필요).insertMember() 등과 같이 내가 객체 생성할 일 없고, Spring이 알아서 해줌 등등 강사님 설명 제대로 못 들음) + logic 처리는 내가 만든 controller 클래스에서 각 기능 담당하는 메소드가 함 + handler mapping(새로운 개념)
 // ___하는(2022.3.11(금) 15h 나의 생각 = 이 클래스의 생성을 Spring이 알아서 하도록 하는? + 2022.3.15(화) 22h15 나의 생각 = Spring이 이 클래스를 controller로 인식할 수 있게 하는? 의존성 주입하는? 방법1) 이 컨트롤러를 bean으로 등록해두기
 // 방법2) Controller 타입의 annotation('@Controller')을 달아두/붙여주면 bean scanning을 통해 자동으로 bean 등록됨 -> servlet-context.xml 설정 파일의 context:component-scan이 내 프로젝트에 있는 모든 파일을 읽는데, 'controller' annotation이 달려있으면 Spring이 이게 컨트롤러라고 알아서 인식함
 @Controller
@@ -37,7 +38,7 @@ public class MemberController {
 	private MemberService memberService; // memberService = interface = 객체 생성 불가능 -> interface를 상속/구현한 자식 클래스는 interface 타입의 생성자로 객체 생성 가능함 -> 이 interface(? 2022.3.11(금) 16h15 나의 생각 = 뭘 쓰다 만거지? ㅠ.ㅠ)
 	// Spring이 이 타입에 맞는 것을 찾아서 나에게 줌 = 이렇게 객체 생성을 Spring에게 맡김 = 의존성 주입
 	// interface를 상속받은 자식 클래스들이 많은 경우, 해당 메소드 signature에 맞는 메소드를 가진 객체를 Spring이 찾아서 줌
-	// 2022.2.17(목) 12h 왜 MemberServiceImpl로 안 하/가는가? -> 추후 MemberServiceImpl2 등으로 바꿨을 때 소스코드 일일이 수정해야 함 = 유지/보수 불편 vs 모듈화/객체화/객체지향프로그래밍(oop)/다형성 -> 부품/객체만 갈아끼움 등 강사님 설명 제대로 이해 못 함 ㅠ.ㅠ
+	// 2022.2.17(목) 12h 왜 MemberServiceImpl로 안 하/가는가? -> 추후 MemberServiceImpl2 등으로 바꿨을 때 소스코드 일일이 수정해야 함 = 유지/보수 불편 vs 모듈화/객체화/객체지향프로그래밍(oop)/다형성 -> 부품/객체만 갈아끼움 등 강사님 설명 제대로 이해 못 함 ㅠ.ㅠ -> 2023.10.8(일) 15H25 i think that now i know what the teacher meant..
 	
 	// 2022.2.18(금) 11h5 추가 -> 아래 클래스? bean 등록해두었으니까, 이렇게 의존성 주입 가능함
 	@Autowired
@@ -224,6 +225,8 @@ public class MemberController {
 		return mv;
 	} // logoutMember() 종료
 	*/
+
+	// JSP project MemberDeleteController에서 배운 내용 = // invalidate() 메소드를 사용하면 session이 만료되어 alert가 작동하지 않을 것임 -> session.removeAttribute("key 값")를 활용(해당 key 값에 대한 value만 없어짐)해서 로그아웃 시키기
 	
 	// 강사님 방식
 	@RequestMapping("logout.me")
@@ -254,7 +257,7 @@ public class MemberController {
 		// 2022.2.18(금) 10h15 테스트 시, 나이 입력하지 않아도 문제 없이 동작함; Member(userId=user04, userPwd=pass04, userName=사용자4, email=, gender=F, age=, phone=, address=, enrollDate=null, modifyDate=null, status=null)
 		
 		// 2022.2.18(금) 10h_
-		// 문제3 = 사용자가 입력한 있는 그대로의 비밀번호 plain text(평문)가 보임 = 개인정보보호법에 위배 -> 해결 방법 = Spring security module(pom.xml에 library 추가)에서 제공하는 부품인 Bcrypt 방식 사용.. 필기 다 못함
+		// 문제3 = 사용자가 입력한 있는 그대로의 비밀번호 plain text(평문)가 보임 = 개인정보보호법에 위배 -> 해결 방법 = Spring security module에서 제공하는 부품인 Bcrypt 방식 사용 = pom.xml에 library 추가 -> BCryptPasswordEncoder 클래스를 xml파일에 bean으로 등록 -> web.xml에 spring-security.xml 파일을 로딩할 수 있도록 작성
 		// 암호화 방법은 여러 가지가 있음 -> 암호화 방법으로써의 hashing의 문제점 = 같은 비밀번호에 대해 같은 hashing algorithm이 적용되어 같은 결과가 나옴 + 복호화 가능(rainbow bridge; 10h25 강사님 설명 제대로 못 들음)
 		// 요즘에는 복호화가 불가능한 암호 algorithm 사용 + '비밀번호 찾기' 요청하면 '임시 비밀번호'를 보내줌
 		// 평문 + salt 값(보통 nano second 단위까지의 시간) + 암호화 algorithm 돌림 = 암호

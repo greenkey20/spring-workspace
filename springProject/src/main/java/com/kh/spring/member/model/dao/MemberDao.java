@@ -1,11 +1,11 @@
-package com.kh.spring.member.model.dao;
+package main.java.com.kh.spring.member.model.dao;
 
 import org.mybatis.spring.SqlSessionTemplate;
 //2022.2.17(목) 10h15
 import org.springframework.stereotype.Repository;
 
 import com.kh.spring.entity.CertVo;
-import com.kh.spring.member.model.vo.Member;
+import main.java.com.kh.spring.member.model.vo.Member;
 
 // repository = 저장소 = db -> db 관련 작업/'영속성' 작업 처리
 @Repository

@@ -1,4 +1,4 @@
-package com.kh.spring.member.model.vo;
+package main.java.com.kh.spring.member.model.vo;
 
 import java.sql.Date;
 

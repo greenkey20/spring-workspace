@@ -1,7 +1,7 @@
-package com.kh.spring.member.model.service;
+package main.java.com.kh.spring.member.model.service;
 
 import com.kh.spring.entity.CertVo;
-import com.kh.spring.member.model.vo.Member;
+import main.java.com.kh.spring.member.model.vo.Member;
 
 // interface -> 추상 메소드
 public interface MemberService {

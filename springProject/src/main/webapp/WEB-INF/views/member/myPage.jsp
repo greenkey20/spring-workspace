@@ -27,7 +27,7 @@
 				방법2) session에 담긴 loginUser 값들을 controller에서 빼고, Member 객체에 담아 db에 넘김 = 좀 더 귀찮은 방법-->
             <form action="update.me" method="post"> 
                 <div class="form-group">
-                    <label for="userId">* ID : </label> <!--id = 회원 식별자의 역할을 함 -> 욧청 시 반드시 함께 넘겨야 db UPDATE 처리 가능-->
+                    <label for="userId">* ID : </label> <!--id = 회원 식별자의 역할을 함 -> 요청 시 반드시 함께 넘겨야 db UPDATE 처리 가능-->
                     <input type="text" class="form-control" id="userId" value="${ loginUser.userId }" name="userId" readonly> <br>
 
                     <label for="userName">* Name : </label>
