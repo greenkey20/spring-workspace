@@ -18,20 +18,18 @@
 
 	<!--2022.2.17(목) 14h40-->
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<!--주소 자동 완성 도구 등록 = 매번.. (필기 다 못하고 화면 캡쳐만 해둠 ㅠ.ㅠ)
-	
-		/WEB-INF/views/~~~~~~.jsp를 적기 귀찮으니까 자동완성 해준다.
+	<!--주소 자동 완성 도구 등록
+		- 매번 /WEB-INF/views/~~~~~~.jsp를 적기 귀찮으니까 자동완성 해준다
+		e.g. /WEB-INF/views/board/boardListView.jsp
 		- view resolver라는 도구를 등록(Spring이 해줌)
 		class : 패키지 경로를 포함한 view resolver의 풀 클래스명
 		prefix : 접두사 / suffix : 접미사
-		- 이말인 즉슨 앞으로 작성할 return 부분에 접두사와 접미사를 항상 붙여서 요청하겠다.
+		- 이말인 즉슨 앞으로 작성할 return 부분에 접두사와 접미사를 항상 붙여서 요청하겠다
 	
-		view resolver에 return한 String "main" 들고, servlet-context.xml로 옴 -> 주도 자동 완성 도구 등록
-		/WEB-INF/views/main.jsp = 절대경로(맨 앞의 / = webapp) = "main" 문자열의 목적지
+		view resolver에 return한 String "main" 들고, servlet-context.xml로 옴 -> 주소 자동 완성 도구 등록 -> /WEB-INF/views/main.jsp = 절대경로(맨 앞의 / = webapp) = "main" 문자열의 목적지
 		"board/boardListView"로 문자열 return하면 /WEB-INF/views/board/boardListView.jsp로 가게 됨
 	-->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	

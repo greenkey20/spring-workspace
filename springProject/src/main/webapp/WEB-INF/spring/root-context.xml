@@ -74,7 +74,7 @@
 		<!--필드 값 초기화(initialisation)-->
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
-		<property name="username" value="greenkey20@mail.net" />
+		<property name="username" value="green@mail.net" />
 		<property name="password" value="" />
 		<property name="javaMailProperties">
 			<props>

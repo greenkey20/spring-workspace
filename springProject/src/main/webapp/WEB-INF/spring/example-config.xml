@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--2023.10.8(일) 22h10 IntelliJ에서 Project에서 마우스 오른쪽 클릭 -> New 메뉴 중 'XML Configuration File' > 'Spring Config' 선택해서 자동 생성해본 파일-->
+
+</beans>
