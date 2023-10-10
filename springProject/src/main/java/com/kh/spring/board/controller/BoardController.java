@@ -1,4 +1,4 @@
-package main.java.com.kh.spring.board.controller;
+package com.kh.spring.board.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import com.kh.spring.board.model.vo.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import main.java.com.kh.spring.board.model.service.BoardService;
-import main.java.com.kh.spring.board.model.vo.Board;
+import com.kh.spring.board.model.service.BoardService;
+import com.kh.spring.board.model.vo.Board;
 import com.kh.spring.board.model.vo.Reply;
-import main.java.com.kh.spring.common.model.vo.PageInfo;
-import main.java.com.kh.spring.common.template.Pagination;
+import com.kh.spring.common.model.vo.PageInfo;
+import com.kh.spring.common.template.Pagination;
 
 // 2022.2.21(월) 10h40
 

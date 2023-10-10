@@ -1,6 +1,6 @@
-package main.java.com.kh.spring.common.template;
+package com.kh.spring.common.template;
 
-import main.java.com.kh.spring.common.model.vo.PageInfo;
+import com.kh.spring.common.model.vo.PageInfo;
 
 // 2022.2.14(월) 17h30
 public class Pagination {

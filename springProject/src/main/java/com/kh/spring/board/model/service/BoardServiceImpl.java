@@ -1,4 +1,4 @@
-package main.java.com.kh.spring.board.model.service;
+package com.kh.spring.board.model.service;
 
 import java.util.ArrayList;
 
@@ -6,10 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.java.com.kh.spring.board.model.dao.BoardDao;
-import main.java.com.kh.spring.board.model.vo.Board;
+import com.kh.spring.board.model.dao.BoardDao;
+import com.kh.spring.board.model.vo.Board;
 import com.kh.spring.board.model.vo.Reply;
-import main.java.com.kh.spring.common.model.vo.PageInfo;
+import com.kh.spring.common.model.vo.PageInfo;
 
 // 2022.2.21(월) 10h35
 

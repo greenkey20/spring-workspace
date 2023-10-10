@@ -84,6 +84,7 @@
     							$("#checkResult").show();
     							$("#checkResult").css("color", "orange").text("해당 id가 이미 존재합니다/중복됩니다");
     							$("#enrollForm :submit").attr("disabled", true); // 12h35 나의 질문 = 선택자 :submit의 의미 모르겠음 ㅠ.ㅠ -> 12h45 jQuery 수업 '추가적인 선택자'상, :type속성값 = 입력 양식 선택자
+                                // $idInput.focus(); // id 재입력 유도 <- workspace2 JSP project에서 작성했던 코드
     						}
     						else {
     							$("#checkResult").show(); // 12h40 나의 질문 = 이 메소드는 아래 css, text 메소드와  method chaining 안 되나?

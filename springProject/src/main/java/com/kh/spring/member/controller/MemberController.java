@@ -1,11 +1,10 @@
-package main.java.com.kh.spring.member.controller;
+package com.kh.spring.member.controller;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import main.java.com.kh.spring.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.spring.entity.CertVo;
-import main.java.com.kh.spring.member.model.service.MemberService;
-import main.java.com.kh.spring.member.model.vo.Member;
+import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.model.vo.Member;
 
 // 2022.2.15(화) 12h45 jdbc 배울 때 했듯이 일반 Java 클래스로 만든 controller에 여러 메소드 모아서 쓸 것임
 // Spring에 servlet은 존재하긴 함: view단으로부터 사용자가 요청함 -> servlet(Spring에서는 DispatcherServlet)이 모든 요청을 받아줌 -> 요청별로 실행/처리할 내용은 다른 바, DispatcherServlet으로부터 어찌저찌 이 MemberController(나만의 controller)로 받고, 그 안에서 각기 다른 메소드로 처리

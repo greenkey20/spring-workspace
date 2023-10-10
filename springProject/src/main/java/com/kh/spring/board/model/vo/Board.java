@@ -1,4 +1,4 @@
-package main.java.com.kh.spring.board.model.vo;
+package com.kh.spring.board.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

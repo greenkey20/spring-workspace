@@ -1,4 +1,4 @@
-package main.java.com.kh.spring.member.model.service;
+package com.kh.spring.member.model.service;
 
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service; // 이 library import하지 않으면, 'Service cannot be resolved to a type' 빨간줄
 
 import com.kh.spring.entity.CertVo;
-import main.java.com.kh.spring.member.model.dao.MemberDao;
-import main.java.com.kh.spring.member.model.vo.Member;
+import com.kh.spring.member.model.dao.MemberDao;
+import com.kh.spring.member.model.vo.Member;
 
 // @Component = bean으로 등록 vs @Service = component보다 더 구체화시켜서 Service bean으로 등록
 @Service

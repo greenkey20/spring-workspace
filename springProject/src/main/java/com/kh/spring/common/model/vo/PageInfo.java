@@ -1,4 +1,4 @@
-package main.java.com.kh.spring.common.model.vo;
+package com.kh.spring.common.model.vo;
 
 // 2022.2.14(월) 17h25
 public class PageInfo {

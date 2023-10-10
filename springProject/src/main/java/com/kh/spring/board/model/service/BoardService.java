@@ -1,10 +1,10 @@
-package main.java.com.kh.spring.board.model.service;
+package com.kh.spring.board.model.service;
 
 import java.util.ArrayList;
 
-import main.java.com.kh.spring.board.model.vo.Board;
+import com.kh.spring.board.model.vo.Board;
 import com.kh.spring.board.model.vo.Reply;
-import main.java.com.kh.spring.common.model.vo.PageInfo;
+import com.kh.spring.common.model.vo.PageInfo;
 
 // 2022.2.21(월) 10h15
 // interface = 강제성이 짙음 -> 이 interface를 implements하는 클래스는 아래 메소드들을 반드시 구현해야 함
