@@ -97,7 +97,7 @@
 						
 						// 11h20 강사님 설명 = jQuery find() 메소드 -> 기준이 되는 요소의 하위 요소들 중 특정 요소를 찾을 때 사용
 						// console.log(data.find("item")); // Uncaught TypeError: data.find is not a function
-						// console.log($(data).find("item")); // find()는 jQuery용 메소드니까, jQuery 객체로 바꿔줘야 사용 가능 -> $(data)(o) data(x)로 사용 -> k.fn.init(10) [item, item, item, item, item, item, item, item, item, item, prevObject: k.fn.init(1)]
+						// console.log($(data).find("item")); // find()는 jQuery용 메소드(선택된 요소를 기준으로 모든 후손 요소들 중에서 제시한 값과 일치하는 요소들만 선택)니까, jQuery 객체로 바꿔줘야 사용 가능 -> $(data)(o) data(x)로 사용 -> k.fn.init(10) [item, item, item, item, item, item, item, item, item, item, prevObject: k.fn.init(1)]
 						
 						// 단계1) 응답 데이터 안에 실제 데이터가 담겨있는 요소 선택
 						let itemArr2 = $(data).find("item"); // 응답받은 데이터 data 중에 'item' 태그들(? 정확히 어떤 선택자?인지 공부 필요) 선택
@@ -219,7 +219,7 @@
 						})
 						$tbody.html(bodyTr);
 						
-						$table.append($thead, $tbody).appendTo("#result3"); // append() -> 자식 요소로 넣음?; appendTo()? 14h40 강사님 설명 제대로 못 들음 ㅠ.ㅠ
+						$table.append($thead, $tbody).appendTo("#result3"); // append() -> 자식 요소로 넣음?; appendTo()? 14h40 강사님 설명 제대로 못 들음 ㅠ.ㅠ -> frontend_workspace > jquery '09_요소 생성 및 제거.html' 참고
 								
 						/* 만약 반복문을 돌리지 않고, 아래와 같이 진행할 경우
 						$table.append($thead)

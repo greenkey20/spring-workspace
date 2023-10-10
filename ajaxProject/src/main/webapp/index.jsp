@@ -23,7 +23,7 @@
 
 	<!--방법1) form 태그로 감싸고 submit-->
 
-	<!--form 태그 없이 하려면(? 맞나?) 방법2) 버튼에 id 속성 주고, 선택해서 클릭했을 때 실행할 익명함수에 AJAX-->
+	<!--form 태그 없이 하려면(맞나?) 방법2) 버튼에 id 속성 주고, 선택해서 클릭했을 때 실행할 익명함수에 AJAX-->
 	<!--<button id="btn1">전송</button>-->
 	
 	<!--방법3) form 태그 없이 + button의 onclick 속성에 '선언적 함수(이름 있는 함수)'를 값으로 부여-->
@@ -71,7 +71,7 @@
 					// $("#result1").html(result);
 					
 					// JSON 응답 방법1 = 응답 데이터가 배열(JSONArray)의 형태일 경우, '[인덱스]'로 인덱스에 접근 
-					// $('#result1').html("이름 = " + result[0] + "<br>나이 = " + result[1]); // 필기 제대로 못함
+					// $('#result1').html("이름 = " + result[0] + "<br>나이 = " + result[1]);
 					
 					// JSON 응답 방법2 = 응답 데이터가 객체(JSONObject)의 형태일 경우, '객체명.속성명'으로 속성에 접근 가능
 					$('#result1').html("이름 = " + result.name + "<br>나이 = " + result.age);
